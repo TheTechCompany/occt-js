@@ -14,17 +14,11 @@ RUN apt-get install -y wget build-essential automake libtool autoconf cmake pyth
 # Freetype #
 ############
 
-WORKDIR /opt/build
-RUN wget https://download.savannah.gnu.org/releases/freetype/freetype-2.10.0.tar.gz
-RUN tar -zxvf freetype-2.10.0.tar.gz >> installed_freetype2100_files.txt
+RUN apt-get install -y libfreetype6 libfreetype6-dev
 
-WORKDIR /opt/build/freetype-2.10.0
-RUN sh autogen.sh
-WORKDIR /opt/build/freetype2
-WORKDIR /opt/build/freetype-2.10.0/build
-RUN emconfigure ../configure
-RUN emcmake cmake .. 
-RUN emmake make install
+RUN apt-get install -y tcl tcl-dev tk tk-dev 
+
+RUN apt-get install -y libx11-dev mesa-common-dev libglu1-mesa-dev
 
 ###############
 # OpenCascade #
@@ -49,31 +43,3 @@ RUN emmake cmake \
 
 RUN emmake make -j10
 RUN emmake make install
-
-###############
-# Sample wasm #
-###############
-
-WORKDIR /opt/build/opencascade-7.7.0/samples/webgl/
-RUN emmake cmake \
-  -Dfreetype_DIR=/usr/local/lib/cmake/freetype/ \
-  -DOpenCASCADE_DIR=/opt/build/occt770/lib/cmake/opencascade/ \
-  -DCMAKE_INSTALL_PREFIX=/opt/build/opencascade-7.7.0/samples/webgl/ \
-  .
-RUN emmake make
-RUN emmake make install
-# Why it is comming without extension?
-RUN mv occt-webgl-sample occt-webgl-sample.js
-
-WORKDIR /opt/build/opencascade-7.7.0/samples/webgl/samples
-RUN cp /opt/build/opencascade-7.7.0/data/occ/Ball.brep /opt/build/opencascade-7.7.0/samples/webgl/samples
-
-WORKDIR /opt/build/opencascade-7.7.0/samples 
-
-#################
-# Simple servar #
-#################
-
-RUN apt-get -y install python3
-EXPOSE 7000
-CMD python3 -m http.server 7000
