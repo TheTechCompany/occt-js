@@ -14,6 +14,8 @@ RUN apt-get install -y wget build-essential automake libtool autoconf cmake pyth
 # Freetype #
 ############
 
+RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
+
 RUN apt-get install -y libfreetype6 libfreetype6-dev
 
 RUN apt-get install -y tcl tcl-dev tk tk-dev 
