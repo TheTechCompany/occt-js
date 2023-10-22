@@ -18,9 +18,9 @@ RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
 
 RUN apt-get install -y libfreetype6 libfreetype6-dev
 
-RUN apt-get install -y tcl tcl-dev tk tk-dev 
+#RUN apt-get install -y tcl tcl-dev tk tk-dev 
 
-RUN apt-get install -y libx11-dev mesa-common-dev libglu1-mesa-dev
+#RUN apt-get install -y libx11-dev mesa-common-dev libglu1-mesa-dev
 
 ###############
 # OpenCascade #
