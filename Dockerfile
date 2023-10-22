@@ -8,19 +8,17 @@ USER root
 
 RUN apt-get update 
 
-RUN apt-get install -y wget build-essential automake libtool autoconf cmake python3
+RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
+
+RUN apt-get install -y build-essential cmake wget tcl-dev tk-dev libxmu-dev libxi-dev libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev
 
 ############
 # Freetype #
 ############
 
-RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
+
 
 RUN apt-get install -y libfreetype6 libfreetype6-dev
-
-#RUN apt-get install -y tcl tcl-dev tk tk-dev 
-
-#RUN apt-get install -y libx11-dev mesa-common-dev libglu1-mesa-dev
 
 ###############
 # OpenCascade #
@@ -33,15 +31,17 @@ RUN wget https://github.com/Open-Cascade-SAS/OCCT/archive/refs/tags/V7_7_0.tar.g
 RUN tar -zxvf V7_7_0.tar.gz >> installed_occt770_files.txt
 WORKDIR /opt/build/OCCT-7_7_0/build
 
-RUN apt-get install libfreetype-dev -y
+#RUN emmake cmake \
+#  -DCMAKE_SIZEOF_VOID_P=8 \
+#  -DINSTALL_DIR=/opt/build/occt770 \
+#  -DBUILD_RELEASE_DISABLE_EXCEPTIONS=OFF \
+#  -DBUILD_MODULE_Draw=OFF \
+#  -DBUILD_LIBRARY_TYPE="Static" \
+#  ..
 
-RUN emmake cmake \
-  -DCMAKE_SIZEOF_VOID_P=8 \
-  -DINSTALL_DIR=/opt/build/occt770 \
-  -DBUILD_RELEASE_DISABLE_EXCEPTIONS=OFF \
-  -DBUILD_MODULE_Draw=OFF \
-  -DBUILD_LIBRARY_TYPE="Static" \
-  ..
+RUN  cmake ..     -D CMAKE_BUILD_TYPE=release     -D CMAKE_INSTALL_PREFIX=/usr
 
-RUN emmake make -j10
-RUN emmake make install
+RUN make -j4
+RUN make install
+#RUN emmake make -j10
+#RUN emmake make install
