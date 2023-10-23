@@ -9,16 +9,8 @@ USER root
 RUN apt-get update 
 
 RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
-
-RUN apt-get install -y build-essential cmake wget tcl-dev tk-dev libxmu-dev libxi-dev libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev
-
-############
-# Freetype #
-############
-
-
-
-RUN apt-get install -y libfreetype6 libfreetype6-dev
+RUN apt-get -y install build-essential cmake vim wget rapidjson-dev tcl-dev tk-dev libfreetype6-dev libgl1-mesa-dev libxmu-dev libxi-dev
+# RUN apt-get install -y build-essential cmake wget tcl-dev tk-dev libxmu-dev libxi-dev libglfw3-dev libgl1-mesa-dev libglu1-mesa-dev
 
 ###############
 # OpenCascade #
@@ -39,7 +31,7 @@ WORKDIR /opt/build/OCCT-7_7_0/build
 #  -DBUILD_LIBRARY_TYPE="Static" \
 #  ..
 
-RUN  cmake ..     -D CMAKE_BUILD_TYPE=release     -D CMAKE_INSTALL_PREFIX=/usr
+RUN  cmake .. -G "Unix Makefiles" -D USE_RAPIDJSON:BOOL="ON" -D CMAKE_BUILD_TYPE=release -D CMAKE_INSTALL_PREFIX=/usr
 
 RUN make -j4
 RUN make install
