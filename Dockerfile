@@ -17,7 +17,7 @@ RUN apt-get -y install git build-essential cmake vim wget rapidjson-dev tcl-dev 
 ###############
 
 WORKDIR /opt/build
-RUN git clone https://git.dev.opencascade.org/repos/occt.git --depth=1
+RUN git clone https://git.dev.opencascade.org/repos/occt.git
 RUN cd occt && git checkout cec1ecd0c9f3b3d2572c47035d11949e8dfa85e2
 # RUN wget https://github.com/Open-Cascade-SAS/OCCT/archive/refs/tags/V7_7_0.tar.gz 
 
